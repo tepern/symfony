@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\BlogRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\PersistentCollection;
 
 #[ORM\Entity(repositoryClass: BlogRepository::class)]
 class Blog
@@ -23,6 +25,12 @@ class Blog
     #[ORM\ManyToOne(targetEntity: Category::class)]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
     private Category|null $category = null;
+
+    #[ORM\JoinTable(name: 'tags_to_blog')]
+    #[ORM\JoinColumn(name: 'blog_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'id', unique: true)]
+    #[ORM\ManyToMany(targetEntity: Tag::class, cascade: ['persist'])]
+    private ArrayCollection|PersistentCollection $tags;
 
     public function getId(): ?int
     {
@@ -63,5 +71,22 @@ class Blog
         $this->category = $category;
 
         return $this;
+    }
+
+    public function getTags(): ArrayCollection|PersistentCollection
+    {
+        return $this->tags;
+    }
+
+    public function setTags(ArrayCollection $tags): static
+    {
+        $this->tags = $tags;
+
+        return $this;
+    }
+
+    public function addTag(Tag $tag): void
+    {
+        $this->tags[] = $tag;
     }
 }

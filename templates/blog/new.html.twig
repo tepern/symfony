@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% block title %}New Blog{% endblock %}
 
@@ -6,6 +6,6 @@
     <h1>Create new Blog</h1>
 
     {{ include('blog/_form.html.twig') }}
-
-    <a href="{{ path('app_blog_index') }}">back to list</a>
+    </br>
+    <a class="btn btn-success" href="{{ path('app_blog_index') }}">back to list</a>
 {% endblock %}
